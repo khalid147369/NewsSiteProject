@@ -1,0 +1,27 @@
+.header {
+  background-color: #242d3e;
+  color: white;
+  padding:5px 0;
+}
+
+.header ul {
+  display: flex;
+  justify-content: right;
+  gap: 30px;
+  align-items: center;
+}
+
+.header li {
+  list-style: none;
+}
+
+.header a {
+  text-decoration: none;
+  color: white;
+}
+
+.header a:hover {
+  text-decoration: underline;
+}
+
+

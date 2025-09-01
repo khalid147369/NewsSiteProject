@@ -1,0 +1,20 @@
+.post {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 16px;
+    margin: 16px 0;
+    background-color: #f9f9f9;
+    color: #555;
+    width: 30%;
+ } 
+
+.post h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: black;
+}
+
+.post  p {
+    font-size: 16px;
+    color: #555;
+}
