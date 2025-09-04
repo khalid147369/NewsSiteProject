@@ -1,7 +1,6 @@
 // import React from 'react';
 import "./Header.css"; // Assuming you have a CSS file for styles
 import Avatar from "../../components/avatar/Avatar";
-import { Link } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import Nav from "../../components/nav/Nav";
 import Container from "../../components/container/container";

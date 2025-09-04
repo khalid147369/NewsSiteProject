@@ -14,6 +14,7 @@ const initialPosts: PostsType = {
     politics: 0,
     sports: 0,
     world: 0,
+    technology: 0,
   },
 };
 
@@ -23,8 +24,7 @@ type Action =
   | { type: "FETCH_SUCCESS"; payload: PostsType }
   | { type: "FETCH_ERROR"; payload: string };
 
-export function useGetAllPostsReducer(
-) {
+export function useGetAllPostsReducer() {
   function reducer(state: PostsType, action: Action): PostsType {
     switch (action.type) {
       case "SET_POSTS":
@@ -50,8 +50,11 @@ export function useGetAllPostsReducer(
       case "FETCH_ERROR":
         return { ...state, loading: false, error: action.payload };
 
-      default:
-        throw new Error(`Unhandled action type: ${action.type}`);
+      default: {
+        // Exhaustiveness check
+        const _exhaustiveCheck: never = action;
+        throw new Error(`Unhandled action type: ${(_exhaustiveCheck as any).type}`);
+      }
     }
   }
   const [state, dispatch] = useReducer(reducer, initialPosts);
@@ -62,7 +65,8 @@ export function useGetAllPostsReducer(
       const data = await getPosts(page, direction);
       dispatch({ type: "FETCH_SUCCESS", payload: data });
     } catch (err) {
-      dispatch({ type: "FETCH_ERROR", payload: err.message });
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      dispatch({ type: "FETCH_ERROR", payload: errorMessage });
     }
   };
   const updatePosts = (data: IPost[]) => {
@@ -75,5 +79,3 @@ export function useGetAllPostsReducer(
     updatePosts,
   };
 }
-
-

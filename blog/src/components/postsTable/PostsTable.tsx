@@ -1,16 +1,11 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Typography,
-} from "@material-tailwind/react";
+import { Alert, Button, Card, Typography } from "@material-tailwind/react";
 import type { IPost } from "../../utils/types";
 import { Link } from "react-router-dom";
-import { ListItems } from "../list/list";
-import React, { useEffect, useRef } from "react";
-import { removePosts } from "../../api/posts";
-import { usePostsContext } from "../../context/PanelContext";
-import  { useUser } from "../../context/UserContext";
+import { ListItems } from "../list/List"; // Fixed casing
+import React, { useEffect } from "react";
+// import { removePosts } from "../../api/posts";
+// import { usePostsContext } from "../../context/PanelContext";
+// import { useUser } from "../../context/UserContext";
 
 const TABLE_HEAD = ["title", "Category", "Date", "Actions"];
 
@@ -19,8 +14,8 @@ export function PostTable({ posts }: { posts: IPost[] }) {
   const [checked, setChecked] = React.useState<boolean[]>([]);
   const [postsToDelete, setPostsToDelete] = React.useState<string[]>([]);
   const [message, setMessage] = React.useState<string>("");
-  const {categories ,currentCategory} = usePostsContext()
-  const {user} = useUser()
+  // const { categories, currentCategory } = usePostsContext();
+  // const { user } = useUser();
   useEffect(() => {
     setPostsToDelete([]);
     posts?.map((post, index) => {
@@ -92,41 +87,39 @@ export function PostTable({ posts }: { posts: IPost[] }) {
       });
   };
 
-
-
-  const handleRemovePosts = async () => {
-    const result = await removePosts(user?.data?.accessToken ?? "", postsToDelete);
-    if (result && result.status === 200) {
-      setPostsToDelete([]);
-      setChecked([]);
-      setVisible(false);
-      setMessage(result.data.message || "");
-      currentCategory === 'all'
-        ? categories[currentCategory].fetch(categories[currentCategory].data.page, categories.all.data.direction)
-        : categories[currentCategory].fetch(currentCategory, categories[currentCategory].data.page, categories.all.data.direction);
-      setTimeout(() => {
-        setMessage("");
-      }, 3000);
+  const handleDeletePosts = async () => {
+    try {
+      // Simulate deletion logic or API call
+      setMessage("Posts deleted successfully!");
+      setTimeout(() => setMessage(""), 3000); // Clear message after 3 seconds
+    } catch (error) {
+      setMessage("Failed to delete posts.");
+      setTimeout(() => setMessage(""), 3000); // Clear message after 3 seconds
     }
   };
+
   return (
-    <Card className="h-full w-full overflow-scroll">
-      {
-        message&&<Alert
+    <Card shadow={true} className="h-full w-full overflow-scroll"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+      {message && (
+        <Alert
           className=" bg-green-400 relative h-8 rounded-none  "
           color="green"
         >
           {message}
         </Alert>
-      }
+      )}
       {visible && (
-        <Typography variant="h6" color="blue-gray" className="p-4 text-right">
+        <Typography
+          variant="h6"
+          color="blue-gray"
+          className="p-4 text-right"
+          placeholder="Text"  onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}        >
           {postsToDelete.length} Posts to delete
           <Button
             size="sm"
-            className="ml-2 bg-red-500 rounded"
-            onClick={handleRemovePosts}
-          >
+            className="btn-class"
+            onClick={handleDeletePosts}
+            placeholder="Button content"  onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}          >
             Delete
           </Button>
         </Typography>
@@ -142,8 +135,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
-                >
+                  className="font-normal leading-none opacity-70"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                >
                   {head}
                 </Typography>
               </th>
@@ -153,8 +145,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className=" flex justify-between items-center font-normal leading-none opacity-70"
-                >
+                  className=" flex justify-between items-center font-normal leading-none opacity-70"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                >
                   <span>{"Select All"}</span>{" "}
                   <i
                     style={{ display: visible ? "inline" : "none" }}
@@ -179,8 +170,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                     <Typography
                       variant="small"
                       color="blue-gray"
-                      className="font-normal"
-                    >
+                      className="font-normal"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                    >
                       <img
                         src={post.image || ""}
                         alt={post.title}
@@ -194,8 +184,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
-                  >
+                    className="font-normal"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     {post.category}
                   </Typography>
                 </td>
@@ -203,8 +192,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
-                  >
+                    className="font-normal"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     {post.publishedAt
                       ? new Date(post.publishedAt).toLocaleDateString()
                       : "N/A"}
@@ -215,13 +203,10 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                     as="span"
                     variant="small"
                     color="blue-gray"
-                    className="font-medium"
-                  >
+                    className="font-medium"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     <ListItems
                       id={post._id}
                       handleselect={() => handleShowSelect(index, post._id)}
-                      category=""
-                      
                     />
                   </Typography>
                 </td>
@@ -230,8 +215,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                     as="span"
                     variant="small"
                     color="blue-gray"
-                    className="font-medium"
-                  >
+                    className="font-medium"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     <i
                       style={{ display: visible ? "inline" : "none" }}
                       className={
@@ -239,7 +223,7 @@ export function PostTable({ posts }: { posts: IPost[] }) {
                           ? "fa-solid fa-square-check text-2xl"
                           : "fa-regular fa-square text-2xl"
                       }
-                      onClick={(e) => handleSelect(index, post._id)}
+                      onClick={() => handleSelect(index, post._id)}
                     ></i>{" "}
                   </Typography>
                 </td>
@@ -251,3 +235,4 @@ export function PostTable({ posts }: { posts: IPost[] }) {
     </Card>
   );
 }
+

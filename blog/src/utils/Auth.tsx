@@ -1,8 +1,8 @@
-import React, { use } from 'react';
+import React from 'react';
 import { useEffect } from 'react'
 import { useRefreshToken } from '../refreshToken/refreshtoken'
 import {useUser} from '../context/UserContext'
-import { Navigate, Outlet, useNavigate,useLocation } from 'react-router-dom';
+import {  Outlet, useNavigate,useLocation } from 'react-router-dom';
 const Auth = () => {
 
   const refreshToken = useRefreshToken();

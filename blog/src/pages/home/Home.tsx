@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import  { useEffect, useRef, useCallback } from "react";
 import Post from "../../components/post/post";
 import "./Home.css";
 import { usePostsContext } from "../../context/PostsContext";

@@ -1,8 +1,6 @@
 import { useReducer } from "react";
-import type { IPost, PostsType } from "../utils/types";
+import type { IPost, PostsType } from "../../utils/types"; // Fixed import path
 import { getPosts } from "../../api/posts";
-
-
 
 const initialPosts: PostsType = {
   posts: [],
@@ -14,11 +12,10 @@ const initialPosts: PostsType = {
   direction: -1,
   totalCategory: {
     politics: 0,
-sports: 0,
-world:0
-}
-
-
+    sports: 0,
+    world: 0,
+    technology: 0,
+  },
 };
 
 type Action =
@@ -27,58 +24,58 @@ type Action =
   | { type: "FETCH_SUCCESS"; payload: PostsType }
   | { type: "FETCH_ERROR"; payload: string };
 
-export   function useGetAllPostsReducer( ){
-    function reducer(state: PostsType, action: Action): PostsType {
-        switch (action.type) {
-    case "SET_POSTS":
-       
-      return { ...state,posts:action.payload };
-    case "FETCH_START":
-      return { ...state, loading: true, error: null };
-    case "FETCH_SUCCESS":
+export function useGetAllPostsReducer() {
+  function reducer(state: PostsType, action: Action): PostsType {
+    switch (action.type) {
+      case "SET_POSTS":
+        return { ...state, posts: action.payload };
+      case "FETCH_START":
+        return { ...state, loading: true, error: null };
+      case "FETCH_SUCCESS":
+        return {
+          ...state,
+          posts: action.payload.posts,
+          total: action.payload.total,
+          page: action.payload.page,
+          totalPages: action.payload.totalPages,
+          loading: false,
+          error: null,
+          direction: action.payload.direction || -1,
+          totalCategory: action.payload.totalCategory,
+        };
+      case "FETCH_ERROR":
+        return { ...state, loading: false, error: action.payload };
 
-      return {
-    ...state,
-    posts: action.payload.posts,
-    total: action.payload.total,
-    page: action.payload.page,
-    totalPages: action.payload.totalPages,
-    loading: false,
-    error: null,
-    direction: action.payload.direction || -1,
-    totalCategory:action.payload.totalCategory
-  };
-    case "FETCH_ERROR":
-      return { ...state, loading: false, error: action.payload };
-
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
+      default: {
+        // Exhaustiveness check
+        const _exhaustiveCheck: never = action;
+        throw new Error(`Unhandled action type: ${(_exhaustiveCheck as any).type}`);
+      }
     }
+  }
   const [state, dispatch] = useReducer(reducer, initialPosts);
 
- const fetchData = async (page :number=1,direction:number=-1) => {
+  const fetchData = async (page: number = 1, direction: number = -1) => {
     dispatch({ type: "FETCH_START" });
     try {
       const data = await getPosts(page, direction);
       dispatch({ type: "FETCH_SUCCESS", payload: data });
     } catch (err) {
-      dispatch({ type: "FETCH_ERROR", payload: err.message });
+      dispatch({ type: "FETCH_ERROR", payload: (err as { message: string }).message });
     }
   };
- const updatePosts = (data:IPost[]) => {
-    
-    
-      dispatch({ type: "SET_POSTS", payload: data });
-    
+  const updatePosts = (data: IPost[]) => {
+    dispatch({ type: "SET_POSTS", payload: data });
   };
-  
-return {
-    all:state,
+
+  return {
+    all: state,
     fetchData,
-    updatePosts
+    updatePosts,
   };
-    }
+}
+    
+
 
 
 

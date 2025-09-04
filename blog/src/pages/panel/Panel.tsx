@@ -1,14 +1,12 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { PostTable } from "../../components/postsTable/PostsTable";
-import { getPosts, getAreaPosts } from "../../api/posts";
 // import { usePost } from "../../context/PostsContext";
 import { usePostsContext } from "../../context/PanelContext";
 import { type IPost } from "../../utils/types";
 import { Button, ButtonGroup } from "@material-tailwind/react";
 import "./panel.css"; // Import your CSS file for styling
-import { PanelPagination } from "../../components/panelPagination/panelPagination";
+import { PanelPagination } from "../../components/panelPagination/PanelPagination";
 import Graph from "../../components/Graph/Graph";
-import { TableCellsIcon } from "@heroicons/react/24/outline";
 import UsersTable from "../../components/usersTable/usersTable";
 import Container from "../../components/container/container";
 const Panel = () => {
@@ -20,8 +18,6 @@ const Panel = () => {
   const world = categories.world.data;
   const politics = categories.politics.data;
   const technology = categories.technology.data;
-  const [isListShowed, setIsListShowed] = useState(false);
-
   const [posts, setPosts] = useState<IPost[]>(all.data.posts);
   const [pages, setPages] = useState({
     sports: sports.page,
@@ -35,7 +31,7 @@ const Panel = () => {
     sort: "newest" | "oldest";
     filter: PageKey;
   }>({ sort: "newest", filter: "all" });
-  const btnGrpRef = useRef(null);
+  const btnGrpRef = useRef<HTMLDivElement>(null);
   const totalPosts = categories.all.data.total;
   const totalPagesByCategory = {
     sports: sports.totalPages || 0,
@@ -74,7 +70,6 @@ const Panel = () => {
   const fetchPosts = async () => {
     try {
       await all.fetch(1, options.sort === "newest" ? -1 : 1);
-
     } catch (error) {
       console.error("Error fetching posts:", error);
       // Try to fetch area posts as a fallback
@@ -93,24 +88,24 @@ const Panel = () => {
   }, []);
 
   //   switch categories
-  const handleclick = (el) => {
+  const handleclick = (el: React.MouseEvent<HTMLButtonElement>) => {
     // You can add more functionality here
     if (!el?.currentTarget) return;
     if (!btnGrpRef.current) return;
     const buttons = btnGrpRef.current.children;
-    Array.from(buttons).forEach((child, i) => {
+    Array.from(buttons).forEach((child) => {
       child.classList.remove("active");
     });
 
     el.currentTarget.classList = el.currentTarget?.classList + " active";
     if (options.filter !== "all")
       categories[options.filter].fetch(
-        el?.currentTarget?.textContent,
+        el?.currentTarget?.textContent??"",
         1,
         options.sort === "newest" ? -1 : 1
       );
 
-    setOptions((prev) => ({ ...prev, filter: el?.currentTarget?.textContent }));
+    setOptions((prev) => ({ ...prev, filter: el?.currentTarget?.textContent as PageKey }));
   };
 
   //   move to next or prev posts
@@ -128,28 +123,27 @@ const Panel = () => {
   const filters = ["all", "sports", "world", "politics", "technology"];
 
   //   select get and  posts from newest or oldest
-  const handleselect = (e) => {
+  const handleselect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const sortFunction = e.target.value === "newest";
     if (!sortFunction) {
       if (options.filter === "all") {
         all.fetch(1, 1);
-        setOptions((prev) => ({ ...prev, sort: e.target.value }));
+        setOptions((prev) => ({ ...prev, sort: e.target.value as "newest" | "oldest" }));
       } else {
         categories[options.filter].fetch(options.filter, 1, 1);
 
-        setOptions((prev) => ({ ...prev, sort: e.target.value }));
+        setOptions((prev) => ({ ...prev, sort: e.target.value as "newest" | "oldest"}));
       }
     } else {
       if (options.filter === "all") {
         all.fetch(1, -1);
-        setOptions((prev) => ({ ...prev, sort: e.target.value }));
+        setOptions((prev) => ({ ...prev, sort: e.target.value as "newest" | "oldest" }));
       } else {
         categories[options.filter].fetch(options.filter, 1, -1);
-        setOptions((prev) => ({ ...prev, sort: e.target.value }));
+        setOptions((prev) => ({ ...prev, sort: e.target.value as "newest" | "oldest" }));
       }
     }
   };
-
 
   //  calculate total posts
   const calculateTotalPosts = () => {
@@ -185,18 +179,7 @@ const Panel = () => {
   return (
     <Container>
       <div className="">
-        <section className="flex flex-col  gap-2 mb-5">
-          <div className="flex items-center gap-4 px-4">  
-            <label className="font-medium  underline ">Sort by:</label>
-            <select
-              onChange={handleselect}
-              className="font-medium bg-blue-500 my-5 text-white "
-            >
-              <option value="newest">from the newest</option>
-              <option value="oldest">from the oldest</option>
-            </select>
-          </div>
-        </section>
+
         <section className="flex items-center flex-col xl:flex-row">
           <div className=" w-[35%]  relative  right-10">
             <Graph
@@ -222,14 +205,25 @@ const Panel = () => {
           </div>
           <UsersTable />
         </section>
-
+      
         <VerticalGap />
         <Container>
+                  <section className="flex flex-col  gap-2 mb-5">
+          <div className="flex items-center gap-4 px-4">
+            <label className="font-medium  underline ">Sort by:</label>
+            <select
+              onChange={handleselect}
+              className="font-medium bg-blue-500 my-5 text-white "
+            >
+              <option value="newest">from the newest</option>
+              <option value="oldest">from the oldest</option>
+            </select>
+          </div>
+        </section>
           <ButtonGroup
-            size="med"
+            size="md"
             ref={btnGrpRef}
-            className="  buttongroup flex gap-5 px-4 my-8"
-          >
+            className="  buttongroup flex gap-5 px-4 my-8"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}          >
             <label className="font-medium">Category :</label>
 
             {filters.map((filter, index) => (
@@ -242,8 +236,7 @@ const Panel = () => {
                       ...prev,
                       filter: filter as PageKey,
                     }));
-                }}
-              >
+                } }  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}              >
                 {filter}
               </Button>
             ))}

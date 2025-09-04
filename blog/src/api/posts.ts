@@ -1,5 +1,4 @@
 import axios from "axios";
-import {  useUser } from "../context/UserContext"; // Adjust the import path as necessary 
 const API_BASE = import.meta.env.VITE_API_URL;
 export async function getPosts( page: number = 1,direction: number = -1) {
   // Assuming you have a context to manage user state

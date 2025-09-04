@@ -1,31 +1,29 @@
-import { Card, Typography } from '@material-tailwind/react';
-import  {  useEffect } from 'react';
-import { usePostsContext } from '../../context/PanelContext';
-import { useUser } from '../../context/UserContext';
+import { Card, Typography } from "@material-tailwind/react";
+import { useEffect } from "react";
+import { usePostsContext } from "../../context/PanelContext";
+import { useUser } from "../../context/UserContext";
 
 const UsersTable = () => {
-const {user} = useUser()
-    const {users } =usePostsContext();
-   const usersData =  users?.data?.users 
-   const TABLE_HEAD =['id','username','email','role']         
-type User ={
-username:string,
-_id:string,
-email:string,
-roles:'user' | 'admin'
-}
-    
-    useEffect(()=>{
-        users.fetch(user.data.accessToken ??'');
-    },[])
+  const { user } = useUser();
+  const { users } = usePostsContext();
+  const usersData = users?.data?.users;
+  const TABLE_HEAD = ["id", "username", "email", "role"];
+  type User = {
+    username: string;
+    _id: string;
+    email: string;
+    roles: "user" | "admin";
+  };
 
+  useEffect(() => {
+    users.fetch(user.data.accessToken ?? "");
+  }, []);
 
-    return (
-
-
-
-            <Card className=" relative w-full z-0 h-full xl:w-[65%] min-w-2xs overflow-scroll shadow-r-none max-h-[382px] overflow-y-auto">
-
+  return (
+    <Card
+      shadow={false}
+      className="relative w-full z-0 h-full xl:w-[65%]"
+      placeholder="Card content"  onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}    >
       <table className="w-full min-w-max table-auto text-left  ">
         <thead>
           <tr>
@@ -37,37 +35,31 @@ roles:'user' | 'admin'
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
-                >
+                  className="font-normal leading-none opacity-70"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                >
                   {head}
                 </Typography>
               </th>
             ))}
-    
           </tr>
         </thead>
         <tbody>
-          {usersData?.map((user: User, index) => {
+          {usersData?.map((user: User) => {
             const classes = "p-4 border-b border-blue-gray-50";
             return (
               <tr key={user.username}>
                 <td className={classes}>
-
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-
-                      {user._id}
-                    </Typography>
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
+                    {user._id}
+                  </Typography>
                 </td>
                 <td className={`${classes} bg-blue-gray-50/50`}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal"
-                  >
+                    className="font-normal"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     {user.username}
                   </Typography>
                 </td>
@@ -77,10 +69,8 @@ roles:'user' | 'admin'
                     as="span"
                     variant="small"
                     color="blue-gray"
-                    className="font-medium"
-                  >
+                    className="font-medium"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     {user.email}
-   
                   </Typography>
                 </td>
                 <td className={`${classes} bg-blue-gray-50/50`}>
@@ -88,9 +78,7 @@ roles:'user' | 'admin'
                     as="span"
                     variant="small"
                     color="blue-gray"
-                    className="font-medium"
-                  >
-  
+                    className="font-medium"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  >
                     {user.roles}
                   </Typography>
                 </td>
@@ -100,11 +88,7 @@ roles:'user' | 'admin'
         </tbody>
       </table>
     </Card>
-
-
-
-        
-    );
-}
+  );
+};
 
 export default UsersTable;

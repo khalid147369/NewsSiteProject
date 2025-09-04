@@ -30,11 +30,10 @@ export function PanelPagination({
         variant="outlined"
         onClick={prev}
         disabled={active === 1}
-        className="bg-gray-800 rounded px-4 text-white"
-      >
+        className="bg-gray-800 rounded px-4 text-white"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}      >
         Back
       </Button>
-      <Typography color="gray" className="font-normal">
+      <Typography color="gray" className="font-normal"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
         Page <strong className="text-gray-900">{active}</strong> of
         <strong className="text-gray-900">{totalPages}</strong>
       </Typography>
@@ -43,8 +42,7 @@ export function PanelPagination({
         variant="outlined"
         onClick={next}
         disabled={active === totalPages}
-        className="bg-gray-800 rounded px-4 text-white"
-      >
+        className="bg-gray-800 rounded px-4 text-white"  placeholder={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}      >
         Next
         {/* <ArrowRightIcon strokeWidth={2} className="h-4 w-4" /> */}
       </Button>

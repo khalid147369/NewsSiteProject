@@ -4,17 +4,20 @@ import { useGetWorldReducer } from "../reducer/PanelReducers/WorldPostsReducer";
 import { useGetAllPostsReducer } from "../reducer/PanelReducers/AllPostsReducer";
 import { useGetSportsReducer } from "../reducer/PanelReducers/SportsPostsReducer";
 import { useGetPoliticsReducer } from "../reducer/PanelReducers/PoliticsPostsReducer";
-import { getPosts, getAreaPosts } from "../api/posts";
 import { useGetTechnologyReducer } from "../reducer/PanelReducers/TechnologyPostsReducer";
 import { useGetAllusersReducer } from "../reducer/usersReducers.ts/usersReducers";
 
-type FetchWithArea = (area: string, page?: number, direction?: number) => Promise<void>;
+type FetchWithArea = (
+  area: string,
+  page?: number,
+  direction?: number
+) => Promise<void>;
 type FetchWithoutArea = (page?: number, direction?: number) => Promise<void>;
 type CategoryKey = "all" | "world" | "sports" | "politics";
 type CategoryState<T extends (...args: any) => Promise<void>> = {
   data: PostsType;
   fetch: T;
-  update:( data: IPost[]) => void
+  update: (data: IPost[]) => void;
 };
 
 type PostContextType = {
@@ -25,18 +28,20 @@ type PostContextType = {
     politics: CategoryState<FetchWithArea>;
     technology: CategoryState<FetchWithArea>;
   };
-  users:{
+  users: {
     data: any;
-    fetch: (token:string) => Promise<void>;
-    update:( data: IPost[]) => void
+    fetch: (token: string) => Promise<void>;
+    update: (data: IPost[]) => void;
   };
   post: IPost | undefined;
   setPost: React.Dispatch<React.SetStateAction<IPost | undefined>>;
-  currentCategory: CategoryKey ;
-  setCurrentCategory: React.Dispatch<React.SetStateAction<CategoryKey >>;
+  currentCategory: CategoryKey;
+  setCurrentCategory: React.Dispatch<React.SetStateAction<CategoryKey>>;
 };
 
-export const PostContext = createContext<PostContextType | undefined>(undefined);
+export const PostContext = createContext<PostContextType | undefined>(
+  undefined
+);
 
 // Hook para consumir el contexto
 export const usePostsContext = () => {
@@ -47,57 +52,58 @@ export const usePostsContext = () => {
   return context;
 };
 // Provider
-export const PostsAdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const PostsAdminProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   // Reducers por categoría
-  const { fetchData, all ,updatePosts  } = useGetAllPostsReducer(getPosts);
+  const { fetchData, all, updatePosts } = useGetAllPostsReducer();
   const { fetchWorld, world } = useGetWorldReducer();
   const { fetchSports, sports } = useGetSportsReducer();
   const { fetchPolitics, politics } = useGetPoliticsReducer();
   const { fetchTechnology, technology } = useGetTechnologyReducer();
-const {getusers,users} = useGetAllusersReducer();
+  const { getusers, users } = useGetAllusersReducer();
   const [post, setPost] = useState<IPost>();
   const [currentCategory, setCurrentCategory] = useState<string | undefined>();
 
   const value: PostContextType = {
     categories: {
-      all: { 
-        data: all,          //  if you wont add here edit CategoryState first !!
+      all: {
+        data: all, //  if you wont add here edit CategoryState first !!
         fetch: fetchData,
-        update:updatePosts
+        update: updatePosts,
       },
-      world: { 
-        data: world, 
+      world: {
+        data: world,
         fetch: fetchWorld,
-        update:updatePosts
+        update: updatePosts,
       },
-      sports: { 
-        data: sports, 
-        fetch: fetchSports ,
-        update:updatePosts
-
+      sports: {
+        data: sports,
+        fetch: fetchSports,
+        update: updatePosts,
       },
-      politics: { 
-        data: politics, 
-        fetch: fetchPolitics ,
-        update:updatePosts
-
+      politics: {
+        data: politics,
+        fetch: fetchPolitics,
+        update: updatePosts,
       },
-       technology: { 
-        data: technology, 
-        fetch: fetchTechnology ,
-        update:updatePosts
-
-      }
+      technology: {
+        data: technology,
+        fetch: fetchTechnology,
+        update: updatePosts,
+      },
     },
     post,
     setPost,
-    users:{
+    users: {
       data: users,
-      fetch: (token:string) => getusers(token),
-      update:()=>{}
+      fetch: (token: string) => getusers(token),
+      update: () => {},
     },
-    currentCategory,
-    setCurrentCategory,
+    currentCategory: (currentCategory as CategoryKey) || "defaultCategory",
+    setCurrentCategory: setCurrentCategory as React.Dispatch<
+      React.SetStateAction<CategoryKey>
+    >,
   };
   return <PostContext.Provider value={value}>{children}</PostContext.Provider>;
 };

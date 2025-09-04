@@ -1,5 +1,6 @@
 import { useReducer } from "react";
-import type { PostsType } from "../utils/types";
+// Make sure the correct path is used and the file exists
+import type { PostsType } from "../../utils/types";
 import { getAreaPosts } from "../../api/posts";
 
 
@@ -42,8 +43,11 @@ export   function useGetSportsReducer( ){
     case "FETCH_ERROR":
       return { ...state, loading: false, error: action.payload };
 
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      default: {
+        // Exhaustiveness check
+        const _exhaustiveCheck: never = action;
+        throw new Error(`Unhandled action type: ${(_exhaustiveCheck as any).type}`);
+      }
   }
     }
   const [state, dispatch] = useReducer(reducer, initialPosts);
@@ -54,7 +58,8 @@ export   function useGetSportsReducer( ){
       const data = await getAreaPosts(area,page, direction);
       dispatch({ type: "FETCH_SUCCESS", payload: data });
     } catch (err) {
-      dispatch({ type: "FETCH_ERROR", payload: err.message });
+      const errorMessage = (err instanceof Error && err.message) ? err.message : "An unknown error occurred";
+      dispatch({ type: "FETCH_ERROR", payload: errorMessage });
     }
   };
   

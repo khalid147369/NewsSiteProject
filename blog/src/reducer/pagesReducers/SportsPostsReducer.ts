@@ -18,9 +18,7 @@ type Action =
   | { type: "FETCH_SUCCESS"; payload: PostsType }
   | { type: "FETCH_ERROR"; payload: string };
 
-export function useGetSportsReducer(
- 
-) {
+export function useGetSportsReducer() {
   function reducer(state: PostsType, action: Action): PostsType {
     switch (action.type) {
       case "SET_ALL_POSTS":
@@ -45,7 +43,9 @@ export function useGetSportsReducer(
         return { ...state, loading: false, error: action.payload };
 
       default:
-        throw new Error(`Unhandled action type: ${action.type}`);
+        throw new Error(
+          `Unhandled action type: ${(action as { type: string }).type}`
+        );
     }
   }
   const [state, dispatch] = useReducer(reducer, initialPosts);
@@ -60,7 +60,10 @@ export function useGetSportsReducer(
       const data = await getAreaPosts(area, page, direction);
       dispatch({ type: "FETCH_SUCCESS", payload: data });
     } catch (err) {
-      dispatch({ type: "FETCH_ERROR", payload: err.message });
+      dispatch({
+        type: "FETCH_ERROR",
+        payload: (err as { message: string }).message,
+      });
     }
   };
 
