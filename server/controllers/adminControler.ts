@@ -6,7 +6,8 @@ export const makeAdmin = async (req: Request, res: Response) => {
   try {
     const user = await UserModel.findById(id);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+       res.status(404).json({ message: 'User not found' });
+       return;
     }
     user.roles = 'admin'; // Cambia el rol a admin
     await user.save();

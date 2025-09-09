@@ -9,6 +9,6 @@ router.post('/register', userController_1.register);
 router.post('/login', userController_1.login);
 router.post('/refreshtoken', refreshtoken_1.refreshToken);
 router.post('/logout', userController_1.logout);
-router.patch('/editProfile', authmiddleware_1.verifyToken, asyncHandler(userController_1.editProfile));
+router.patch('/editProfile', authmiddleware_1.verifyToken, userController_1.editProfile);
 router.patch('/editProfilePassword', authmiddleware_1.verifyToken, userController_1.editProfilePassword);
 exports.default = router;

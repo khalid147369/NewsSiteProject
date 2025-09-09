@@ -20,7 +20,8 @@ const refreshToken = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.refreshToken;
         if (!token) {
-            return res.status(401).json({ message: "Refresh token not provided" });
+            res.status(401).json({ message: "Refresh token not provided" });
+            return;
         }
         // Verify refresh token
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_REFRESH_SECRET || "default_refresh_secret");
@@ -29,7 +30,8 @@ const refreshToken = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             refreshtoken: token,
         });
         if (!user) {
-            return res.status(403).json({ message: "Invalid refresh token" });
+            res.status(403).json({ message: "Invalid refresh token" });
+            return;
         }
         // Issue new access token
         const accessToken = jsonwebtoken_1.default.sign({ userId: user._id, username: user.username, email: user.email, role: user.roles }, process.env.JWT_SECRET || "default_secret", { expiresIn: "15m" });

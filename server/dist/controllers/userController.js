@@ -19,13 +19,15 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        res.status(400).json({ message: "All fields are required" });
+        return;
     }
     try {
         console.log("Registering user:", { username, email, password });
         const userExists = yield user_1.default.findOne({ email });
         if (userExists) {
-            return res.status(409).json({ message: "User already exists" });
+            res.status(409).json({ message: "User already exists" });
+            return;
         }
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const newUser = new user_1.default({
@@ -38,7 +40,6 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (err) {
         res.status(500).json({ message: "Server error", error: err });
-        next(err);
     }
 });
 exports.register = register;
@@ -47,11 +48,13 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield user_1.default.findOne({ email });
         if (!user) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            res.status(401).json({ message: "Invalid credentials" });
+            return;
         }
         const isPasswordValid = yield bcryptjs_1.default.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid pasword or username" });
+            res.status(401).json({ message: "Invalid pasword or username" });
+            return;
         }
         // Generate JWT access token
         console.log('roles from login: ', user.roles);
@@ -102,7 +105,8 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const refreshToken = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.refreshToken;
         if (!refreshToken) {
-            return res.status(204).json({ message: "No refresh token provided" });
+            res.status(204).json({ message: "No refresh token provided" });
+            return;
         }
         // Find user by refresh token
         const user = yield user_1.default.findOne({ refreshtoken: refreshToken });
@@ -129,19 +133,23 @@ const editProfilePassword = (req, res) => __awaiter(void 0, void 0, void 0, func
     const { previousPassword, newPassword } = req.body;
     const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId; // Assuming user ID is stored in req.user by auth middleware
     if (!userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: "Unauthorized" });
+        return;
     }
     if (!previousPassword || !newPassword) {
-        return res.status(400).json({ message: "Password not provided" });
+        res.status(400).json({ message: "Password not provided" });
+        return;
     }
     const user = yield user_1.default.findById(userId);
     if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "User not found" });
+        return;
     }
     try {
         const isPasswordValid = yield bcryptjs_1.default.compare(previousPassword, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid previous password" });
+            res.status(401).json({ message: "Invalid previous password" });
+            return;
         }
         const hashedPassword = yield bcryptjs_1.default.hash(newPassword, 10);
         user.password = hashedPassword;
@@ -160,12 +168,14 @@ const editProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const newUserData = Object.assign({}, req.body);
     const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId; // Assuming user ID is stored in req.user by auth middleware
     if (!userId) {
-        return res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: "Unauthorized" });
+        return;
     }
     try {
         const updatedUser = yield user_1.default.findByIdAndUpdate(userId, newUserData, { new: true, runValidators: true });
         if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
+            res.status(404).json({ message: "User not found" });
+            return;
         }
         res.json({
             message: "Profile updated successfully",

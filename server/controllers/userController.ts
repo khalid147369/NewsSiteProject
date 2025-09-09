@@ -7,13 +7,16 @@ import user from "../models/user";
 export const register = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+     res.status(400).json({ message: "All fields are required" });
+     return;
+
   }
   try {
     console.log("Registering user:", { username, email, password });
     const userExists = await UserModel.findOne({ email });
     if (userExists) {
-      return res.status(409).json({ message: "User already exists" });
+       res.status(409).json({ message: "User already exists" });
+       return;
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new UserModel({
@@ -25,7 +28,6 @@ export const register = async (req: Request, res: Response) => {
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
-    next(err)
   }
 };
 
@@ -34,11 +36,13 @@ export const login = async (req: Request, res: Response) => {
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+       res.status(401).json({ message: "Invalid credentials" });
+       return;
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid pasword or username" });
+      res.status(401).json({ message: "Invalid pasword or username" });
+      return;
     }
 
     // Generate JWT access token
@@ -103,7 +107,8 @@ export const logout = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies?.refreshToken;
     if (!refreshToken) {
-      return res.status(204).json({ message: "No refresh token provided" });
+       res.status(204).json({ message: "No refresh token provided" });
+        return;
     }
 
     // Find user by refresh token
@@ -131,22 +136,26 @@ export const editProfilePassword = async (req: Request, res: Response) => {
   const userId = req.user?.userId; // Assuming user ID is stored in req.user by auth middleware
 
   if (!userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+     res.status(401).json({ message: "Unauthorized" });
+      return;
   }
 if (!previousPassword || !newPassword) {
 
  
-    return res.status(400).json({ message: "Password not provided" });
+     res.status(400).json({ message: "Password not provided" });
+      return;
   }
   const user  =await UserModel.findById(userId);
  if (!user) {
-      return res.status(404).json({ message: "User not found" });
+       res.status(404).json({ message: "User not found" });
+        return;
     }
     
   try {
     const isPasswordValid = await bcrypt.compare(previousPassword, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid previous password" });
+       res.status(401).json({ message: "Invalid previous password" });
+        return;
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
@@ -168,7 +177,8 @@ export const editProfile = async (req: Request, res: Response) => {
   const userId = req.user?.userId; // Assuming user ID is stored in req.user by auth middleware
 
   if (!userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+     res.status(401).json({ message: "Unauthorized" });
+      return;
   }
 
   
@@ -181,7 +191,8 @@ export const editProfile = async (req: Request, res: Response) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
+      return;
     }
 
     res.json({

@@ -6,7 +6,8 @@ import { SortOrder } from 'mongoose';
 export const createPost = async (req: Request, res: Response) => {
   const { title, content, author } = req.body;
   if (!title || !content || !author) {
-    return res.status(400).json({ message: 'All fields are required' });
+    res.status(400).json({ message: 'All fields are required' });
+    return ;
   }
   try {
     const newPost = new PostModel({ title, content, author });
@@ -81,7 +82,8 @@ export const getPostById = async (req: Request, res: Response) => {
   try {
     const post = await PostModel.findById(id);
     if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+       res.status(404).json({ message: 'Post not found' });
+       return;
     }
     res.status(200).json(post);
   } catch (err) {
@@ -95,7 +97,8 @@ export const deletePost = async (req: Request, res: Response) => {
     const post = await PostModel.findById(id);
 
     if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+       res.status(404).json({ message: 'Post not found' });
+       return;
     }
     await PostModel.findByIdAndDelete(id);
 
@@ -107,7 +110,8 @@ export const deletePost = async (req: Request, res: Response) => {
 export const deletePosts = async (req: Request, res: Response) => {
   const { ids } = req.body; // ids debe ser un array de strings
   if (!Array.isArray(ids) || ids.length === 0) {
-    return res.status(400).json({ message: 'No IDs provided' });
+     res.status(400).json({ message: 'No IDs provided' });
+     return;
   }
   try {
     const result = await PostModel.deleteMany({ _id: { $in: ids } });
@@ -123,7 +127,8 @@ export const updatePost = async (req: Request, res: Response) => {
   try {
     const post = await PostModel.findByIdAndUpdate(id, { title, content, author }, { new: true });
     if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+       res.status(404).json({ message: 'Post not found' });
+       return;
     }
     res.status(200).json({ message: 'Post updated successfully', post });
   } catch (err) {

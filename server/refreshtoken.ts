@@ -6,7 +6,8 @@ export const refreshToken = async (req: Request, res: Response) => {
   try {
     const token = req.cookies?.refreshToken;
     if (!token) {
-      return res.status(401).json({ message: "Refresh token not provided" });
+       res.status(401).json({ message: "Refresh token not provided" });
+        return;
     }
 
     // Verify refresh token
@@ -19,7 +20,8 @@ export const refreshToken = async (req: Request, res: Response) => {
       refreshtoken: token,
     });
     if (!user) {
-      return res.status(403).json({ message: "Invalid refresh token" });
+       res.status(403).json({ message: "Invalid refresh token" });
+        return;
     }
 
     // Issue new access token

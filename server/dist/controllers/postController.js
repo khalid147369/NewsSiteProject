@@ -17,7 +17,8 @@ const post_1 = __importDefault(require("../models/post")); // Import the Mongoos
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, content, author } = req.body;
     if (!title || !content || !author) {
-        return res.status(400).json({ message: 'All fields are required' });
+        res.status(400).json({ message: 'All fields are required' });
+        return;
     }
     try {
         const newPost = new post_1.default({ title, content, author });
@@ -91,7 +92,8 @@ const getPostById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const post = yield post_1.default.findById(id);
         if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
+            res.status(404).json({ message: 'Post not found' });
+            return;
         }
         res.status(200).json(post);
     }
@@ -106,7 +108,8 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const post = yield post_1.default.findById(id);
         if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
+            res.status(404).json({ message: 'Post not found' });
+            return;
         }
         yield post_1.default.findByIdAndDelete(id);
         res.status(200).json({ message: 'Post deleted successfully' });
@@ -119,7 +122,8 @@ exports.deletePost = deletePost;
 const deletePosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { ids } = req.body; // ids debe ser un array de strings
     if (!Array.isArray(ids) || ids.length === 0) {
-        return res.status(400).json({ message: 'No IDs provided' });
+        res.status(400).json({ message: 'No IDs provided' });
+        return;
     }
     try {
         const result = yield post_1.default.deleteMany({ _id: { $in: ids } });
@@ -136,7 +140,8 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const post = yield post_1.default.findByIdAndUpdate(id, { title, content, author }, { new: true });
         if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
+            res.status(404).json({ message: 'Post not found' });
+            return;
         }
         res.status(200).json({ message: 'Post updated successfully', post });
     }
