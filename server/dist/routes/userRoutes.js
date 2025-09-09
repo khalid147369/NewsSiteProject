@@ -2,7 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userController_1 = require("../controllers/userController");
+const refreshtoken_1 = require("../refreshtoken");
+const authmiddleware_1 = require("../middleware/authmiddleware");
 const router = (0, express_1.Router)();
 router.post('/register', userController_1.register);
 router.post('/login', userController_1.login);
+router.post('/refreshtoken', refreshtoken_1.refreshToken);
+router.post('/logout', userController_1.logout);
+router.patch('/editProfile', authmiddleware_1.verifyToken, asyncHandler(userController_1.editProfile));
+router.patch('/editProfilePassword', authmiddleware_1.verifyToken, userController_1.editProfilePassword);
 exports.default = router;

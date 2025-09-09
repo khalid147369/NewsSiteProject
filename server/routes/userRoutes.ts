@@ -9,7 +9,7 @@ router.post('/register', register);
 router.post('/login', login);
 router.post('/refreshtoken', refreshToken);
 router.post('/logout', logout);
-router.patch('/editProfile',verifyToken, editProfile);
+router.patch('/editProfile', verifyToken, asyncHandler(editProfile));
 router.patch('/editProfilePassword',verifyToken, editProfilePassword);
 
 export default router;

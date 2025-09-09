@@ -12,8 +12,10 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     req.user = decoded;
     next();
   } catch (error) {
+    
     return res.status(401).json({ message: 'Token inválido' });
-  }
+    
+    }
 };
 
 // Middleware para verificar si el usuario es admin
