@@ -12,7 +12,6 @@ const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 const connect_1 = require("./db/connect");
 const dotenv_1 = __importDefault(require("dotenv"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-require("./saveEditedPosts/savePosts");
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const corsOptions = {

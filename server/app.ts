@@ -7,7 +7,6 @@ import adminRoutes from "./routes/adminRoutes";
 import { connectDB } from "./db/connect";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import "./saveEditedPosts/savePosts";
 const app = express();
 dotenv.config();
 
