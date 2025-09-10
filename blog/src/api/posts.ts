@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
 export async function getPosts( page: number = 1,direction: number = -1) {
   // Assuming you have a context to manage user state
   // Assuming you have a context to manage posts
