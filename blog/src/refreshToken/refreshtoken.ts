@@ -6,7 +6,7 @@ export function useRefreshToken(apiClient?: AxiosInstance) {
   const client =
     apiClient ||
     axios.create({
-      baseURL: import.meta.env.VITE_API_URL,
+      baseURL: import.meta.env.VITE_ENV ==='production'?import.meta.env.VITE_API_URL_PRO : import.meta.env.VITE_API_URL,
       withCredentials: true,
     });
 
