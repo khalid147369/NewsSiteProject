@@ -21,7 +21,6 @@ const corsOptions = {
     allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use((0, cors_1.default)(corsOptions));
-app.options("*", (0, cors_1.default)(corsOptions));
 app.use(body_parser_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use("/api/users", userRoutes_1.default);
