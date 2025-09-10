@@ -11,7 +11,7 @@ const app = express();
 dotenv.config();
 
 const corsOptions = {
-  origin: "https://newssiteprojectclient.onrender.com", // tu frontend en Render
+  origin: process.env.CORS_ORIGIN, // tu frontend en Render
   credentials: true, // permite enviar cookies
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
