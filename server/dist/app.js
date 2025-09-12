@@ -15,7 +15,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 const corsOptions = {
-    origin: "https://newssiteprojectclient.onrender.com", // tu frontend en Render
+    origin: process.env.CORS_ORIGIN, // tu frontend en Render
     credentials: true, // permite enviar cookies
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
